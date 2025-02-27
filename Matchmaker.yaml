@@ -1,0 +1,26 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: matchmaker-deployment
+  labels:
+    role: matchmaker
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: matchmaker
+  template:
+    metadata:
+      labels:
+        app: matchmaker
+    spec:
+      containers:
+        - name: matchmaker
+          image: docker.io/tp8843/pigeon-project-matchmaker
+          imagePullPolicy: IfNotPresent
+          ports:
+            - name: matchmaker
+              containerPort: 3000
+              protocol: TCP
+      restartPolicy: Always
+
