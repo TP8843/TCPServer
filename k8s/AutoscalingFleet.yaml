@@ -44,3 +44,20 @@ spec:
             - name: pigeon-project-server
               image: docker.io/tp8843/pigeon-project-server:amd64
               imagePullPolicy: IfNotPresent
+---
+apiVersion: "autoscaling.agones.dev/v1"
+kind: FleetAutoscaler
+metadata:
+  name: fleet-autoscaler-example
+spec:
+  fleetName: pigeon-project-fleet
+  policy:
+    type: Buffer
+    buffer:
+      bufferSize: 4
+      minReplicas: 4
+      maxReplicas: 20
+  sync:
+    type: FixedInterval
+    fixedInterval:
+      seconds: 30

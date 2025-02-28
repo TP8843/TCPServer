@@ -1,0 +1,6 @@
+### GET an unallocated room
+GET http://localhost:3000/rooms/
+
+### GET an allocated room with the code {room}
+@room = ABCD
+GET http://localhost:3000/rooms/{{room}}/

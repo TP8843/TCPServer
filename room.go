@@ -19,10 +19,10 @@ type Room struct {
 	Port    int32
 }
 
-type Response struct {
-	success bool
-	data    interface{}
-	error   string
+type RoomResponse struct {
+	Success bool   `json:"Success"`
+	Room    *Room  `json:"Room,omitempty"`
+	Error   string `json:"Error,omitempty"`
 }
 
 func generateRoomCode(length int) string {
@@ -35,20 +35,19 @@ func generateRoomCode(length int) string {
 }
 
 func sendErrorResponse(w http.ResponseWriter, r *http.Request, errorCode int, error string) {
-	w.WriteHeader(errorCode)
-	render.JSON(w, r, Response{
-		success: false,
-		data:    nil,
-		error:   error,
+	render.JSON(w, r, RoomResponse{
+		Success: false,
+		Room:    nil,
+		Error:   error,
 	})
+	w.WriteHeader(errorCode)
 }
 
-func sendSuccessResponse(w http.ResponseWriter, r *http.Request, data interface{}) {
-	w.WriteHeader(200)
-	render.JSON(w, r, Response{
-		success: true,
-		data:    data,
-		error:   "",
+func sendSuccessResponse(w http.ResponseWriter, r *http.Request, data Room) {
+	render.JSON(w, r, RoomResponse{
+		Success: true,
+		Room:    &data,
+		Error:   "",
 	})
 }
 
@@ -77,7 +76,7 @@ func createRoom(w http.ResponseWriter, r *http.Request) {
 	allocation, err := agonesClient.AllocationV1().GameServerAllocations("default").Create(context.TODO(), options, metav1.CreateOptions{})
 
 	if err != nil {
-		sendErrorResponse(w, r, http.StatusInternalServerError, "Error allocating game server")
+		sendErrorResponse(w, r, http.StatusInternalServerError, err.Error())
 		return
 	}
 
@@ -114,7 +113,7 @@ func getRoom(w http.ResponseWriter, r *http.Request) {
 	allocation, err := agonesClient.AllocationV1().GameServerAllocations("default").Create(context.TODO(), options, metav1.CreateOptions{})
 
 	if err != nil {
-		sendErrorResponse(w, r, http.StatusInternalServerError, "Error allocating game server")
+		sendErrorResponse(w, r, http.StatusInternalServerError, err.Error())
 		return
 	}
 
