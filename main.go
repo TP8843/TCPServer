@@ -1,15 +1,12 @@
 package main
 
 import (
+	"agones.dev/agones/pkg/client/clientset/versioned"
 	"agones.dev/agones/pkg/util/runtime"
 	"github.com/go-chi/chi/v5"
 	"github.com/go-chi/chi/v5/middleware"
 	"k8s.io/client-go/rest"
 	"net/http"
-
-	"agones.dev/agones/pkg/client/clientset/versioned"
-	//"agones.dev/agones/pkg/util/runtime"
-	//"k8s.io/client-go/rest"
 )
 
 var agonesClient versioned.Interface
