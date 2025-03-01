@@ -75,7 +75,7 @@ func createRoom(w http.ResponseWriter, r *http.Request) {
 				},
 			},
 			Counters: map[string]allocationV1.CounterAction{
-				"Players": {
+				"players": {
 					Action: &increment,
 					Amount: &one,
 				},
@@ -118,14 +118,14 @@ func getRoom(w http.ResponseWriter, r *http.Request) {
 						},
 					},
 					Counters: map[string]allocationV1.CounterSelector{
-						"Players": {
+						"players": {
 							MinAvailable: 1,
 						},
 					},
 				},
 			},
 			Counters: map[string]allocationV1.CounterAction{
-				"Players": {
+				"players": {
 					Action: &increment,
 					Amount: &one,
 				},
