@@ -35,9 +35,10 @@ spec:
         grpcPort: 9357
         httpPort: 9358
       counters:
-      lists:
         players:
+          count: 0
           capacity: 5
+      lists:
       template:
         spec:
           containers:

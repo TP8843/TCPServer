@@ -12,6 +12,7 @@ import (
 )
 
 const runes = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
+const increment = "Increment"
 
 type Room struct {
 	Code    string
@@ -54,6 +55,9 @@ func sendSuccessResponse(w http.ResponseWriter, r *http.Request, data Room) {
 func createRoom(w http.ResponseWriter, r *http.Request) {
 	roomId := generateRoomCode(4)
 
+	increment := "Increment"
+	one := int64(1)
+
 	options := &allocationV1.GameServerAllocation{
 		Spec: allocationV1.GameServerAllocationSpec{
 			Selectors: []allocationV1.GameServerSelector{
@@ -68,6 +72,12 @@ func createRoom(w http.ResponseWriter, r *http.Request) {
 			MetaPatch: allocationV1.MetaPatch{
 				Labels: map[string]string{
 					"room": roomId,
+				},
+			},
+			Counters: map[string]allocationV1.CounterAction{
+				"Players": {
+					Action: &increment,
+					Amount: &one,
 				},
 			},
 		},
@@ -93,6 +103,8 @@ func getRoom(w http.ResponseWriter, r *http.Request) {
 	roomId := chi.URLParam(r, "room")
 
 	allocated := agonesV1.GameServerStateAllocated
+	increment := "Increment"
+	one := int64(1)
 
 	options := &allocationV1.GameServerAllocation{
 		Spec: allocationV1.GameServerAllocationSpec{
@@ -105,6 +117,17 @@ func getRoom(w http.ResponseWriter, r *http.Request) {
 							"room":             roomId,
 						},
 					},
+					Counters: map[string]allocationV1.CounterSelector{
+						"Players": {
+							MinAvailable: 1,
+						},
+					},
+				},
+			},
+			Counters: map[string]allocationV1.CounterAction{
+				"Players": {
+					Action: &increment,
+					Amount: &one,
 				},
 			},
 		},

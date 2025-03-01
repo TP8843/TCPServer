@@ -2,5 +2,5 @@
 GET http://localhost:3000/rooms/
 
 ### GET an allocated room with the code {room}
-@room = ABCD
+@room = WXMT
 GET http://localhost:3000/rooms/{{room}}/

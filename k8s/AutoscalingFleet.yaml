@@ -35,15 +35,16 @@ spec:
         grpcPort: 9357
         httpPort: 9358
       counters:
-      lists:
         players:
+          count: 0
           capacity: 5
+      lists:
       template:
         spec:
           containers:
             - name: pigeon-project-server
               image: docker.io/tp8843/pigeon-project-server:amd64
-              imagePullPolicy: IfNotPresent
+              imagePullPolicy: Always
 ---
 apiVersion: "autoscaling.agones.dev/v1"
 kind: FleetAutoscaler
