@@ -7,6 +7,7 @@ import (
 	"github.com/go-chi/chi/v5/middleware"
 	"k8s.io/client-go/rest"
 	"net/http"
+	"time"
 )
 
 var agonesClient versioned.Interface
@@ -39,10 +40,16 @@ func main() {
 	r.Get("/rooms/", createRoom)
 	r.Get("/rooms/{room}/", getRoom)
 
-	err = http.ListenAndServe(":3000", r)
+	// TODO: Add TLS when it is actually hosted on AWS
 
-	if err != nil {
-		print(err.Error())
-		return
+	srv := &http.Server{
+		Addr:           ":3000",
+		Handler:        r,
+		ReadTimeout:    5 * time.Second,
+		WriteTimeout:   10 * time.Second,
+		IdleTimeout:    120 * time.Second,
+		MaxHeaderBytes: 1 << 20,
 	}
+
+	logger.Fatal(srv.ListenAndServe())
 }
