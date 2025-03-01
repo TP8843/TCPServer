@@ -49,7 +49,7 @@ spec:
 apiVersion: "autoscaling.agones.dev/v1"
 kind: FleetAutoscaler
 metadata:
-  name: fleet-autoscaler-example
+  name: pigeon-project-fleet-autoscaler
 spec:
   fleetName: pigeon-project-fleet
   policy:
