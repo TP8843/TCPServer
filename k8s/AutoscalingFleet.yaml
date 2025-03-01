@@ -43,7 +43,7 @@ spec:
         spec:
           containers:
             - name: pigeon-project-server
-              image: docker.io/tp8843/pigeon-project-server:amd64
+              image: docker.io/tp8843/pigeon-project-server
               imagePullPolicy: Always
 ---
 apiVersion: "autoscaling.agones.dev/v1"
