@@ -4,7 +4,7 @@ metadata:
   name: pigeon-project-fleet
 spec:
   replicas: 2
-  scheduling: Packed
+  scheduling: Distributed
   strategy:
     type: RollingUpdate
     rollingUpdate:
