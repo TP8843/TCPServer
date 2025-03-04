@@ -112,7 +112,7 @@ spec:
     spec:
       containers:
         - name: pigeon-project-server
-          image: docker.io/tp8843/pigeon-project-server:debug
+          image: docker.io/tp8843/pigeon-project-server:latest
           imagePullPolicy: IfNotPresent
           # nodeSelector is a label that can be used to tell Kubernetes which host
           # OS to use. For Windows game servers uncomment the nodeSelector
