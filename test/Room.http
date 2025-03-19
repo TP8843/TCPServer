@@ -1,6 +1,6 @@
 ### GET an unallocated room
-GET http://localhost/api/rooms/
+GET http://13.42.235.5/api/rooms
 
 ### GET an allocated room with the code {room}
 @room = WXMT
-GET http://localhost/rooms/{{room}}/
+GET http://13.42.235.5/rooms/{{room}}

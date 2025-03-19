@@ -53,6 +53,7 @@ func main() {
 	r.Use(middleware.Recoverer)
 	r.Use(middleware.StripSlashes)
 	r.Use(middleware.Timeout(60 * time.Second))
+	r.Use(middleware.SetHeader("Content-Type", "application/json"))
 
 	r.Get("/", func(w http.ResponseWriter, r *http.Request) {
 		_, err := w.Write([]byte("hello world"))
