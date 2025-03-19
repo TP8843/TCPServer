@@ -44,6 +44,22 @@ spec:
             - name: matchmaker
               containerPort: 3000
               protocol: TCP
+          env:
+            - name: POSTGRES_DB
+              valueFrom:
+                configMapKeyRef:
+                  key: POSTGRES_DB
+                  name: postgres-secret
+            - name: POSTGRES_USER
+              valueFrom:
+                configMapKeyRef:
+                  key: POSTGRES_USER
+                  name: postgres-secret
+            - name: POSTGRES_PASSWORD
+              valueFrom:
+                configMapKeyRef:
+                  key: POSTGRES_PASSWORD
+                  name: postgres-secret
       restartPolicy: Always
 ---
 apiVersion: v1
@@ -58,4 +74,34 @@ spec:
       protocol: TCP
       port: 3000
       targetPort: 3000
-  type: LoadBalancer
+  type: ClusterIP
+---
+#apiVersion: traefik.containo.us/v1alpha1
+#kind: IngressRoute
+#metadata:
+#  name: matchmaker-ingress
+#spec:
+#  entryPoints:
+#    - web
+#  routes:
+#    - kind: Rule
+#      match: PathPrefix(`/`)
+#      services:
+#        - kind: Service
+#          name: matchmaker-service
+#          port: 3000
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: matchmaker-ingress
+spec:
+  rules:
+    - http:
+        paths:
+          - path: /
+            backend:
+              service:
+                name: matchmaker-service
+                port:
+                  number: 3000
+            pathType: Prefix
