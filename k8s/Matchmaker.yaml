@@ -95,7 +95,7 @@ kind: Ingress
 metadata:
   name: matchmaker-ingress
 spec:
-  ingressClassName: traefik-external
+  ingressClassName: traefik
   rules:
     - http:
         paths:
