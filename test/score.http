@@ -1,0 +1,12 @@
+GET http://localhost:80/api/score
+Accept: application/json
+
+###
+POST http://localhost:80/api/score
+Content-Type: application/json
+
+{
+  "Names": "Test Name 3, Test Name 4, etc...",
+  "Score": 200
+}
+

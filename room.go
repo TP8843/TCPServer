@@ -35,16 +35,7 @@ func generateRoomCode(length int) string {
 	return string(out)
 }
 
-func sendErrorResponse(w http.ResponseWriter, r *http.Request, errorCode int, error string) {
-	render.JSON(w, r, RoomResponse{
-		Success: false,
-		Room:    nil,
-		Error:   error,
-	})
-	w.WriteHeader(errorCode)
-}
-
-func sendSuccessResponse(w http.ResponseWriter, r *http.Request, data Room) {
+func sendRoomSuccessResponse(w http.ResponseWriter, r *http.Request, data Room) {
 	render.JSON(w, r, RoomResponse{
 		Success: true,
 		Room:    &data,
@@ -90,13 +81,19 @@ func createRoom(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	// If no available ports, then could not create a room
+	if len(allocation.Status.Ports) == 0 {
+		sendErrorResponse(w, r, http.StatusInternalServerError, "Could not create a room")
+		return
+	}
+
 	roomInfo := Room{
 		Code:    roomId,
 		Address: allocation.Status.Address,
 		Port:    allocation.Status.Ports[0].Port,
 	}
 
-	sendSuccessResponse(w, r, roomInfo)
+	sendRoomSuccessResponse(w, r, roomInfo)
 }
 
 func getRoom(w http.ResponseWriter, r *http.Request) {
@@ -152,5 +149,5 @@ func getRoom(w http.ResponseWriter, r *http.Request) {
 		Port:    allocation.Status.Ports[0].Port,
 	}
 
-	sendSuccessResponse(w, r, roomInfo)
+	sendRoomSuccessResponse(w, r, roomInfo)
 }
