@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Pigeons Parrots Piracy Leaderboard</title>
+    
+    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+</head>
+<body>
+    <table>
+        <thead>
+            <tr>
+                <td>Rank</td>
+                <td>Player Names</td>
+                <td>Score</td>
+            </tr>
+        </thead>
+        <tbody id="scores" 
+               x-data="{ scores: [] }"
+               x-init="fetch('http://13.42.235.5/api/scores/')
+               .then(response => {
+                 if (!response.ok) console.error(`${response.status} - ${response.statusText}`);
+                 
+                 return response.json();
+               })
+               .then(data => scores = data.Scores)
+">
+            <tr x-for="score in scores" :key="score">
+                <td>1</td>
+                <td>Test Player 1, Test Player 2, ...</td>
+                <td>200</td>
+            </tr>
+        </tbody>
+    </table>
+</body>
+</html>
