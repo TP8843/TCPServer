@@ -66,7 +66,7 @@ func main() {
 		_, err := w.Write([]byte("hello world"))
 
 		if err != nil {
-			print(err.Error())
+			logger.WithError(err).Warn(err.Error())
 			return
 		}
 	})
@@ -76,6 +76,23 @@ func main() {
 
 	r.Post("/api/scores", addScore)
 	r.Get("/api/scores", getLeaderboard)
+
+	r.HandleFunc("/leaderboard", func(w http.ResponseWriter, r *http.Request) {
+		http.ServeFile(w, r, "./client/leaderboard.html")
+	})
+
+	fs := http.FileServer(http.Dir("./client/static"))
+	r.Handle("/static/*", http.StripPrefix("/static/", fs))
+
+	r.NotFound(func(w http.ResponseWriter, r *http.Request) {
+		w.WriteHeader(http.StatusNotFound)
+		_, err := w.Write([]byte("404: Even the pigeons couldn't find this one"))
+
+		if err != nil {
+			logger.WithError(err).Warn(err.Error())
+			return
+		}
+	})
 
 	// TODO: Add TLS when it is actually hosted on AWS
 

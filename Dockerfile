@@ -15,6 +15,7 @@ FROM alpine:3.21.3
 WORKDIR /
 
 COPY --from=builder /server /server
+COPY client/ /client/
 
 EXPOSE 3000
 

@@ -88,7 +88,7 @@ spec:
           - path: /
             backend:
               service:
-                name: matchmaker-service
+                name: matchmaker
                 port:
                   number: 3000
             pathType: Prefix
