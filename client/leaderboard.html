@@ -10,6 +10,7 @@
     <table>
         <thead>
             <tr>
+                <td>ID</td>
                 <td>Rank</td>
                 <td>Player Names</td>
                 <td>Score</td>
@@ -25,11 +26,15 @@
                })
                .then(data => scores = data.Scores)
 ">
-            <tr x-for="score in scores" :key="score">
-                <td>1</td>
-                <td>Test Player 1, Test Player 2, ...</td>
-                <td>200</td>
-            </tr>
+            <template x-for="score in scores">
+                <tr>
+                    <td x-text="score.ID"></td>
+                    <td x-text="score.Rank"></td>
+                    <td x-text="score.Names"></td>
+                    <td x-text="score.Score"></td>
+                </tr>
+            </template>
+
         </tbody>
     </table>
 </body>

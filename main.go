@@ -76,6 +76,7 @@ func main() {
 
 	r.Post("/api/scores", addScore)
 	r.Get("/api/scores", getLeaderboard)
+	r.Delete("/api/scores/{id}", deleteScore)
 
 	r.HandleFunc("/leaderboard", func(w http.ResponseWriter, r *http.Request) {
 		http.ServeFile(w, r, "./client/leaderboard.html")

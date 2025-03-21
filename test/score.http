@@ -1,12 +1,17 @@
-GET http://localhost:80/api/score
+@id = 4
+DELETE http://localhost/api/scores/{{id}}
 Accept: application/json
 
 ###
-POST http://localhost:80/api/score
+GET http://localhost/api/scores
+Accept: application/json
+
+###
+POST http://localhost/api/scores
 Content-Type: application/json
 
 {
-  "Names": "Test Name 3, Test Name 4, etc...",
-  "Score": 200
+  "Names": "Thomas",
+  "Score": 202
 }
 
