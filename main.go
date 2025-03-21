@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"github.com/go-chi/chi/v5"
 	"github.com/go-chi/chi/v5/middleware"
+	"github.com/go-chi/cors"
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
 	"k8s.io/client-go/rest"
@@ -53,7 +54,13 @@ func main() {
 	r.Use(middleware.Recoverer)
 	r.Use(middleware.StripSlashes)
 	r.Use(middleware.Timeout(60 * time.Second))
-	r.Use(middleware.SetHeader("Content-Type", "application/json"))
+	r.Use(cors.Handler(cors.Options{
+		AllowedOrigins: []string{"https://*", "http://*"},
+		AllowedMethods: []string{"GET", "POST", "PUT", "DELETE", "OPTIONS"},
+		AllowedHeaders: []string{"Accept", "Authorization", "Content-Type", "X-CSRF-Token"},
+		ExposedHeaders: []string{"Link"},
+		MaxAge:         300,
+	}))
 
 	r.Get("/", func(w http.ResponseWriter, r *http.Request) {
 		_, err := w.Write([]byte("hello world"))
@@ -67,8 +74,8 @@ func main() {
 	r.Get("/api/rooms", createRoom)
 	r.Get("/api/rooms/{room}", getRoom)
 
-	r.Post("/api/score", addScore)
-	r.Get("/api/score", getLeaderboard)
+	r.Post("/api/scores", addScore)
+	r.Get("/api/scores", getLeaderboard)
 
 	// TODO: Add TLS when it is actually hosted on AWS
 

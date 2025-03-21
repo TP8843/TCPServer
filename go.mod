@@ -5,6 +5,7 @@ go 1.24
 require (
 	agones.dev/agones v1.47.0
 	github.com/go-chi/chi/v5 v5.2.1
+	github.com/go-chi/cors v1.2.1
 	github.com/go-chi/render v1.0.3
 	gorm.io/driver/postgres v1.5.11
 	gorm.io/gorm v1.25.12

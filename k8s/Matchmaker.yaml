@@ -65,7 +65,7 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: matchmaker-service
+  name: matchmaker
 spec:
   selector:
     app: matchmaker
@@ -74,22 +74,8 @@ spec:
       protocol: TCP
       port: 3000
       targetPort: 3000
-  type: LoadBalancer
+  type: ClusterIP
 ---
-#apiVersion: traefik.containo.us/v1alpha1
-#kind: IngressRoute
-#metadata:
-#  name: matchmaker-ingress
-#spec:
-#  entryPoints:
-#    - web
-#  routes:
-#    - kind: Rule
-#      match: PathPrefix(`/`)
-#      services:
-#        - kind: Service
-#          name: matchmaker-service
-#          port: 3000
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
