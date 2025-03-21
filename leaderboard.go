@@ -22,10 +22,13 @@ func getLeaderboard(w http.ResponseWriter, r *http.Request) {
 	var rankedScores []RankedScore
 	var currentRank uint = 0
 	var currentScore uint = 0
+	var currentGames uint = 0
 	for _, score := range scores {
+		currentGames += 1
 		if currentScore > score.Score || currentScore == 0 {
 			currentScore = score.Score
-			currentRank += 1
+			currentRank += currentGames
+			currentGames = 0
 		}
 
 		rankedScores = append(rankedScores, RankedScore{

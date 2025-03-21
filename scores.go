@@ -58,7 +58,7 @@ func addScore(w http.ResponseWriter, r *http.Request) {
 
 	// Get ranking of new score
 	var pos uint
-	result = db.Raw("SELECT count(*) FROM scores WHERE score < (SELECT score from scores where id = ?)", score.ID).Scan(&pos)
+	result = db.Raw("SELECT count(*) FROM scores WHERE score > (SELECT score from scores where id = ?)", score.ID).Scan(&pos)
 	if result.Error != nil {
 		sendErrorResponse(w, r, 500, "Could not get ranking")
 	}
