@@ -26,3 +26,4 @@ go.work.sum
 .env
 
 k8s/PostgresSecret.yaml
+k8s/MatchmakerSecret.yaml

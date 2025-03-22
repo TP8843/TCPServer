@@ -3,6 +3,7 @@ package main
 import (
 	agonesV1 "agones.dev/agones/pkg/apis/agones/v1"
 	allocationV1 "agones.dev/agones/pkg/apis/allocation/v1"
+	"agones.dev/agones/pkg/util/runtime"
 	"context"
 	"github.com/go-chi/chi/v5"
 	"github.com/go-chi/render"
@@ -46,6 +47,13 @@ func sendRoomSuccessResponse(w http.ResponseWriter, r *http.Request, data Room) 
 func createRoom(w http.ResponseWriter, r *http.Request) {
 	roomId := generateRoomCode(4)
 
+	_, token, err := tokenAuth.Encode(map[string]interface{}{"room": roomId})
+	if err != nil {
+		logger := runtime.NewLoggerWithSource("main")
+		logger.WithError(err).Fatal("Could not encode token")
+		sendErrorResponse(w, r, 500, "Could not generate token for game server")
+	}
+
 	increment := "Increment"
 	one := int64(1)
 
@@ -63,6 +71,9 @@ func createRoom(w http.ResponseWriter, r *http.Request) {
 			MetaPatch: allocationV1.MetaPatch{
 				Labels: map[string]string{
 					"room": roomId,
+				},
+				Annotations: map[string]string{
+					"accessToken": token,
 				},
 			},
 			Counters: map[string]allocationV1.CounterAction{

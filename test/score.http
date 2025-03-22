@@ -11,7 +11,7 @@ POST http://localhost/api/scores
 Content-Type: application/json
 
 {
-  "Names": "Thomas",
+  "Names": "Illegal Score",
   "Score": 202
 }
 

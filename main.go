@@ -7,6 +7,7 @@ import (
 	"github.com/go-chi/chi/v5"
 	"github.com/go-chi/chi/v5/middleware"
 	"github.com/go-chi/cors"
+	"github.com/go-chi/jwtauth"
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
 	"k8s.io/client-go/rest"
@@ -17,6 +18,7 @@ import (
 
 var agonesClient versioned.Interface
 var db *gorm.DB
+var tokenAuth *jwtauth.JWTAuth
 
 func main() {
 	config, err := rest.InClusterConfig()
@@ -49,6 +51,9 @@ func main() {
 		return
 	}
 
+	// Generate access token for game servers
+	tokenAuth = jwtauth.New("HS256", []byte(os.Getenv("JWT_SECRET")), nil)
+
 	r := chi.NewRouter()
 	r.Use(middleware.Logger)
 	r.Use(middleware.Recoverer)
@@ -74,9 +79,16 @@ func main() {
 	r.Get("/api/rooms", createRoom)
 	r.Get("/api/rooms/{room}", getRoom)
 
-	r.Post("/api/scores", addScore)
 	r.Get("/api/scores", getLeaderboard)
 	r.Delete("/api/scores/{id}", deleteScore)
+
+	r.Group(func(r chi.Router) {
+		// Validate JWT tokens
+		r.Use(jwtauth.Verifier(tokenAuth))
+		r.Use(jwtauth.Authenticator)
+
+		r.Post("/api/scores", addScore)
+	})
 
 	r.HandleFunc("/leaderboard", func(w http.ResponseWriter, r *http.Request) {
 		http.ServeFile(w, r, "./client/leaderboard.html")

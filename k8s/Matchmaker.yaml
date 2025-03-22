@@ -45,6 +45,11 @@ spec:
               containerPort: 3000
               protocol: TCP
           env:
+            - name: JWT_SECRET
+              valueFrom:
+                configMapKeyRef:
+                  key: JWT_SECRET
+                  name: matchmaker-config
             - name: POSTGRES_DB
               valueFrom:
                 configMapKeyRef:

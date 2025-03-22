@@ -18,7 +18,7 @@
         </thead>
         <tbody id="scores" 
                x-data="{ scores: [] }"
-               x-init="fetch('http://13.42.235.5/api/scores/')
+               x-init="fetch('/api/scores/')
                .then(response => {
                  if (!response.ok) console.error(`${response.status} - ${response.statusText}`);
                  

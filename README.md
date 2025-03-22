@@ -2,11 +2,6 @@
 
 ## Install Postgres
 
-### Install Longhorn
-```shell
-> kubectl apply -f https://raw.githubusercontent.com/longhorn/longhorn/v1.6.0/deploy/longhorn.yaml
-```
-
 ### Add Secret for Postgres
 
 ```shell
@@ -30,4 +25,21 @@ data:
 
 ```shell
 > kubectl apply -f ./k8s/Postgres.yaml
+```
+
+## Add Secret for JWT
+
+```shell
+> kubectl apply -f ./k8s/MatchmakerSecret.yaml
+```
+
+```yaml
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: matchmaker-config
+  labels:
+    app: matchmaker
+data:
+  JWT_SECRET: "ADD_SECRET_HERE"
 ```
