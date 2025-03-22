@@ -88,7 +88,8 @@ metadata:
 spec:
   ingressClassName: traefik
   rules:
-    - http:
+    - host: pigeonsparrotspiracy.com
+      http:
         paths:
           - path: /
             backend:
