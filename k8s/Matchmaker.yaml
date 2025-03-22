@@ -98,3 +98,7 @@ spec:
                 port:
                   number: 3000
             pathType: Prefix
+  tls:
+    - secretName: pigeonproject-tls
+      hosts:
+        - pigeonsparrotspiracy.com
