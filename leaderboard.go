@@ -12,7 +12,7 @@ type LeaderboardResponse struct {
 
 // Add a new game's score to the database
 func getLeaderboard(w http.ResponseWriter, r *http.Request) {
-	rankedScores, err := getLeaderboardFromDB()
+	rankedScores, err := getLeaderboardFromDB(10)
 	if err != nil {
 		logger.WithError(err).Error("Error getting leaderboard from database")
 	}
@@ -23,11 +23,11 @@ func getLeaderboard(w http.ResponseWriter, r *http.Request) {
 	})
 }
 
-func getLeaderboardFromDB() ([]RankedScore, error) {
+func getLeaderboardFromDB(limit int) ([]RankedScore, error) {
 	var scores []Score
 	var rankedScores []RankedScore
 
-	result := db.Order("score desc").Find(&scores)
+	result := db.Order("score desc").Limit(limit).Find(&scores)
 	if result.Error != nil {
 		return nil, result.Error
 	}

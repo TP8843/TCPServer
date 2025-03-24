@@ -90,19 +90,23 @@
 <body>
     <div class="leaderboard-container">
         <div x-data="{ loaded: false, scores: [], lastUpdated: '' }"
-             x-init="setInterval(() => {
-                           fetch('/api/scores/')
-                           .then(response => {
-                             if (!response.ok) console.error(`${response.status} - ${response.statusText}`);
-                             
-                             return response.json();
-                           })
-                           .then(data => {
-                                scores = data.Scores;
-                                loaded = true;
-                                lastUpdated = new Date().toLocaleTimeString();
-                           })
-                       }, 5000)">
+             x-init="
+                const fetchScores = () => {
+                   fetch('/api/scores/')
+                   .then(response => {
+                     if (!response.ok) console.error(`${response.status} - ${response.statusText}`);
+                     
+                     return response.json();
+                   })
+                   .then(data => {
+                        scores = data.Scores;
+                        loaded = true;
+                        lastUpdated = new Date().toLocaleTimeString();
+                   })
+                };
+             
+                setInterval(fetchScores, 5000);
+                fetchScores();">
             <h1 class="leaderboard-title">Pigeons, Parrots, Piracy: Leaderboard</h1>
                 <h2 x-show="!loaded">Loading...</h2>
                 <div x-show="loaded" id="scores">
