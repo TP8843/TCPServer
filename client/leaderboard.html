@@ -5,37 +5,117 @@
     <title>Pigeons Parrots Piracy Leaderboard</title>
     
     <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+    <style>
+        * {
+            -webkit-box-sizing: border-box; /* Safari/Chrome, other WebKit */
+            -moz-box-sizing: border-box;    /* Firefox, other Gecko */
+            box-sizing: border-box;         /* Opera/IE 8+ */
+            
+            padding: 0;
+            margin: 0;
+        }
+        
+        body{
+            font-family: sans-serif;
+        }
+        
+        .leaderboard-container {
+            display: flex;
+            justify-content: start;
+            align-items: center;
+            flex-direction: column;
+            
+            margin: 2em;
+            
+            max-height: calc(100vh - 4em);
+        }
+        
+        .leaderboard-container > div {
+            color: #f4f4f4;
+            background: #1f8cb2;
+            border-radius: 5px;
+
+            text-align: center;
+            
+            height: 100%;
+            width: 90vh;
+
+            padding: 1em;
+            
+        }
+        
+        .leaderboard-title {
+            padding: 0.4em 0 0.8em 0;
+        }
+        
+        .leaderboard-item {
+            display: flex;
+            align-items: center;
+            flex-direction: row;
+            justify-content: start;
+        }
+        
+        .leaderboard-item > * {
+            margin: 0.5em;
+        }
+        
+        #scores {
+            background: hsla( 0, 0%, 60%, 0.1);
+        }
+        
+        #scores > *:nth-child(even) {
+            background: hsla( 0, 0%, 80%, 0.1);
+        }
+        
+        
+        .leaderboard-rank {
+            padding: 0.8em;
+            background: #333;
+            border-radius: 50%;
+        }
+
+        .leaderboard-item > * {
+            margin: 0.5em 2em;
+        }
+        
+        .leaderboard-score {
+            margin-left: auto;
+        }
+        
+        .leaderboard-fetched {
+            padding-top: 1em;
+        }
+    </style>
 </head>
 <body>
-    <table>
-        <thead>
-            <tr>
-                <td>ID</td>
-                <td>Rank</td>
-                <td>Player Names</td>
-                <td>Score</td>
-            </tr>
-        </thead>
-        <tbody id="scores" 
-               x-data="{ scores: [] }"
-               x-init="fetch('/api/scores/')
-               .then(response => {
-                 if (!response.ok) console.error(`${response.status} - ${response.statusText}`);
-                 
-                 return response.json();
-               })
-               .then(data => scores = data.Scores)
-">
-            <template x-for="score in scores">
-                <tr>
-                    <td x-text="score.ID"></td>
-                    <td x-text="score.Rank"></td>
-                    <td x-text="score.Names"></td>
-                    <td x-text="score.Score"></td>
-                </tr>
-            </template>
-
-        </tbody>
-    </table>
+    <div class="leaderboard-container">
+        <div x-data="{ loaded: false, scores: [], lastUpdated: '' }"
+             x-init="setInterval(() => {
+                           fetch('/api/scores/')
+                           .then(response => {
+                             if (!response.ok) console.error(`${response.status} - ${response.statusText}`);
+                             
+                             return response.json();
+                           })
+                           .then(data => {
+                                scores = data.Scores;
+                                loaded = true;
+                                lastUpdated = new Date().toLocaleTimeString();
+                           })
+                       }, 5000)">
+            <h1 class="leaderboard-title">Pigeons, Parrots, Piracy: Leaderboard</h1>
+                <h2 x-show="!loaded">Loading...</h2>
+                <div x-show="loaded" id="scores">
+                    <template x-for="score in scores">
+                        <div class="leaderboard-item">
+                            <p class="leaderboard-rank" x-text="`#${score.Rank}`"></p>
+                            <p x-text="score.Names"></p>
+                            <p class="leaderboard-score" x-text="score.Score">200</p>
+                        </div>
+                    </template>
+                </div>
+            <p class="leaderboard-fetched">Last fetched: <span x-text="lastUpdated"></span></p>
+        </div>
+    </div>
 </body>
 </html>

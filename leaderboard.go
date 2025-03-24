@@ -12,14 +12,26 @@ type LeaderboardResponse struct {
 
 // Add a new game's score to the database
 func getLeaderboard(w http.ResponseWriter, r *http.Request) {
+	rankedScores, err := getLeaderboardFromDB()
+	if err != nil {
+		logger.WithError(err).Error("Error getting leaderboard from database")
+	}
+
+	render.JSON(w, r, LeaderboardResponse{
+		Success: true,
+		Scores:  &rankedScores,
+	})
+}
+
+func getLeaderboardFromDB() ([]RankedScore, error) {
 	var scores []Score
+	var rankedScores []RankedScore
 
 	result := db.Order("score desc").Find(&scores)
 	if result.Error != nil {
-		sendErrorResponse(w, r, 500, "Could not get scores from database")
+		return nil, result.Error
 	}
 
-	var rankedScores []RankedScore
 	var currentRank uint = 0
 	var currentScore uint = 0
 	var currentGames uint = 0
@@ -40,8 +52,5 @@ func getLeaderboard(w http.ResponseWriter, r *http.Request) {
 		})
 	}
 
-	render.JSON(w, r, LeaderboardResponse{
-		Success: true,
-		Scores:  &rankedScores,
-	})
+	return rankedScores, nil
 }

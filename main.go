@@ -8,6 +8,7 @@ import (
 	"github.com/go-chi/chi/v5/middleware"
 	"github.com/go-chi/cors"
 	"github.com/go-chi/jwtauth"
+	"github.com/sirupsen/logrus"
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
 	"k8s.io/client-go/rest"
@@ -19,10 +20,11 @@ import (
 var agonesClient versioned.Interface
 var db *gorm.DB
 var tokenAuth *jwtauth.JWTAuth
+var logger *logrus.Entry
 
 func main() {
 	config, err := rest.InClusterConfig()
-	logger := runtime.NewLoggerWithSource("main")
+	logger = runtime.NewLoggerWithSource("main")
 
 	if err != nil {
 		logger.WithError(err).Fatal("Could not create in-cluster config")
@@ -106,8 +108,6 @@ func main() {
 			return
 		}
 	})
-
-	// TODO: Add TLS when it is actually hosted on AWS
 
 	srv := &http.Server{
 		Addr:           ":3000",
