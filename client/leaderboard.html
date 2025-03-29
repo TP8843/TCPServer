@@ -10,13 +10,15 @@
             -webkit-box-sizing: border-box; /* Safari/Chrome, other WebKit */
             -moz-box-sizing: border-box;    /* Firefox, other Gecko */
             box-sizing: border-box;         /* Opera/IE 8+ */
-            
-            padding: 0;
-            margin: 0;
         }
         
         body{
             font-family: sans-serif;
+            background: no-repeat scroll url('/static/background.png');
+            background-size: cover;
+            height: 100vh;
+            padding: 0;
+            margin: 0;
         }
         
         .leaderboard-container {
@@ -24,10 +26,7 @@
             justify-content: start;
             align-items: center;
             flex-direction: column;
-            
-            margin: 2em;
-            
-            max-height: calc(100vh - 4em);
+            /*margin: 2em;*/
         }
         
         .leaderboard-container > div {
@@ -40,12 +39,8 @@
             height: 100%;
             width: 90vh;
 
-            padding: 1em;
+            margin: 2em;
             
-        }
-        
-        .leaderboard-title {
-            padding: 0.4em 0 0.8em 0;
         }
         
         .leaderboard-item {
@@ -53,10 +48,6 @@
             align-items: center;
             flex-direction: row;
             justify-content: start;
-        }
-        
-        .leaderboard-item > * {
-            margin: 0.5em;
         }
         
         #scores {
@@ -67,23 +58,27 @@
             background: hsla( 0, 0%, 80%, 0.1);
         }
         
-        
         .leaderboard-rank {
-            padding: 0.8em;
-            background: #333;
+            background: hsla(0, 0%, 20%, 0.6);
             border-radius: 50%;
+
+            width: 2.8em;
+            height: 2.8em;
+
+            vertical-align: center;
+            text-align: center;
+            justify-content: center;
+            align-items: center;
+            display: flex;
         }
 
         .leaderboard-item > * {
             margin: 0.5em 2em;
+            font-size: large;
         }
-        
+
         .leaderboard-score {
             margin-left: auto;
-        }
-        
-        .leaderboard-fetched {
-            padding-top: 1em;
         }
     </style>
 </head>
@@ -92,7 +87,7 @@
         <div x-data="{ loaded: false, scores: [], lastUpdated: '' }"
              x-init="
                 const fetchScores = () => {
-                   fetch('/api/scores/')
+                   fetch('http://localhost:80/api/scores/')
                    .then(response => {
                      if (!response.ok) console.error(`${response.status} - ${response.statusText}`);
                      
@@ -107,7 +102,7 @@
              
                 setInterval(fetchScores, 5000);
                 fetchScores();">
-            <h1 class="leaderboard-title">Pigeons, Parrots, Piracy: Leaderboard</h1>
+            <h1 class="leaderboard-title">Pigeons, Parrots, Piracy: Top 10 Teams</h1>
                 <h2 x-show="!loaded">Loading...</h2>
                 <div x-show="loaded" id="scores">
                     <template x-for="score in scores">
