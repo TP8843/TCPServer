@@ -14,7 +14,7 @@
         
         body{
             font-family: sans-serif;
-            background: no-repeat scroll url('/static/background.png');
+            background: no-repeat scroll url('./static/background.png');
             background-size: cover;
             height: 100vh;
             padding: 0;
@@ -87,7 +87,7 @@
         <div x-data="{ loaded: false, scores: [], lastUpdated: '' }"
              x-init="
                 const fetchScores = () => {
-                   fetch('http://localhost:80/api/scores/')
+                   fetch('/api/scores/')
                    .then(response => {
                      if (!response.ok) console.error(`${response.status} - ${response.statusText}`);
                      
