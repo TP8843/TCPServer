@@ -17,7 +17,7 @@ spec:
   template:
     # GameServer metadata
     metadata:
-      generateName: pigeon-project-
+      generateName: pigeon-project-debug-
     spec:
       ports:
         - name: default
@@ -43,7 +43,7 @@ spec:
         spec:
           containers:
             - name: pigeon-project-server
-              image: docker.io/tp8843/pigeon-project-server
+              image: docker.io/tp8843/pigeon-project-server:debug
               imagePullPolicy: Always
 ---
 apiVersion: "autoscaling.agones.dev/v1"
